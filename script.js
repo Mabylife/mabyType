@@ -177,6 +177,9 @@ function showText(times) {
 }
 
 function next() {
+  if (volumnStat) {
+    audioCache["shift"].cloneNode().play();
+  }
   finish();
   allChar.forEach((char) => {
     char.remove();
@@ -191,6 +194,9 @@ function next() {
 }
 
 function replay() {
+  if (volumnStat) {
+    audioCache["shift"].cloneNode().play();
+  }
   setTimeout(() => {
     replayBut.classList.remove("active");
   }, 300);
@@ -200,7 +206,7 @@ function replay() {
   let tmpAnsArray = [...ansArray];
   startNewReset();
   ansArray = tmpAnsArray;
-    showText(ansArray.length);
+  showText(ansArray.length);
 }
 
 function startNewReset() {
@@ -363,19 +369,6 @@ function makeResult() {
   resultCon.style.opacity = "1";
 }
 
-function cheat() {
-  finished = true;
-  inputField.blur();
-  makeResult();
-  hudDisplay(false);
-  wordmark.style.opacity = "1";
-  butCon.style.opacity = "1";
-
-  allChar.forEach((char, index) => {
-    char.style.opacity = "0";
-  });
-}
-
 function hudDisplay(status) {
   if (status) {
     huds.forEach((hud) => {
@@ -430,9 +423,16 @@ function toggleVolumn() {
     volumnIcon.src = "icons/volumnOn.svg";
     volumnBut.classList.remove("pressed");
   }
+  if (volumnStat) {
+    audioCache["shift"].cloneNode().play();
+  }
 }
 
 function toggleHud() {
+  if (volumnStat) {
+    audioCache["shift"].cloneNode().play();
+  }
+
   if (hudStat) {
     huds.forEach((hud) => {
       hud.style.opacity = "0";
@@ -476,7 +476,13 @@ function initEventListeners() {
     } else {
       keyName = keyName.toLowerCase();
     }
-    if (allowkeys.includes(keyName) && volumnStat) {
+    if (
+      (e.altKey && keyName === "r") ||
+      (e.altKey && keyName === "m") ||
+      keyName === "tab"
+    ) {
+      return;
+    } else if (allowkeys.includes(keyName) && volumnStat) {
       audioCache[keyName].cloneNode().play();
     }
   });
@@ -520,9 +526,6 @@ function initEventListeners() {
     });
 
   window.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-      cheat();
-    }
     if (e.key === "Tab") {
       e.preventDefault();
       next();
