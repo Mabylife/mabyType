@@ -1,5 +1,41 @@
 import { wordsData } from "./wordsData.js";
 
+const allowkeys = [
+  "a",
+  "b",
+  "c",
+  "d",
+  "e",
+  "f",
+  "g",
+  "h",
+  "i",
+  "j",
+  "k",
+  "l",
+  "m",
+  "n",
+  "o",
+  "p",
+  "q",
+  "r",
+  "s",
+  "t",
+  "u",
+  "v",
+  "w",
+  "x",
+  "y",
+  "z",
+  ",",
+  ".",
+  "capslock",
+  "backspace",
+  "enter",
+  "shift",
+  "space",
+  "tab",
+];
 const volumnBut = document.getElementById("volumnBut");
 const hudBut = document.getElementById("hudBut");
 const huds = document.querySelectorAll(".hud");
@@ -13,8 +49,9 @@ const butCon = document.querySelector(".butCon");
 const showArea = document.getElementById("mainText");
 const unfocusedCover = document.getElementById("unfocused");
 const resultCon = document.getElementById("resultCon");
+const audioCache = {};
 let inputCount;
-const ansArray = [];
+let ansArray = [];
 let isWordsMode = true;
 let times = 10;
 let finished = false;
@@ -29,13 +66,16 @@ let timerStop;
 let volumnStat = true;
 let hudStat = true;
 let totalCD;
+let addedCharLength = 0;
+let beforeAnsArrayLength;
 window.changeMode = changeMode;
 window.replay = replay;
 window.next = next;
 window.toggleVolumn = toggleVolumn;
 window.toggleHud = toggleHud;
-let addedCharLength = 0;
-let beforeAnsArrayLength;
+
+initAudioCache();
+initEventListeners();
 
 startNewReset();
 takeAns(times);
@@ -151,21 +191,21 @@ function next() {
 }
 
 function replay() {
-  finish();
   setTimeout(() => {
     replayBut.classList.remove("active");
   }, 300);
   replayBut.classList.add("active");
 
-  let tmpAnsArray = ansArray;
+  finish();
+  let tmpAnsArray = [...ansArray];
   startNewReset();
   ansArray = tmpAnsArray;
-  showText(ansArray.length);
+  setTimeout(() => {
+    showText(ansArray.length);
+  }, 0);
 }
 
 function startNewReset() {
-  beforeAnsArrayLength = 0;
-  addedCharLength = 0;
   inputField.value = "";
   allChar.forEach((char) => {
     char.remove();
@@ -200,6 +240,7 @@ function finish() {
   makeResult();
   hudDisplay(false);
 }
+
 function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
@@ -235,14 +276,6 @@ function changeMode() {
   next();
 }
 
-inputField.addEventListener("input", () => {
-  if (/[^a-zA-Z\s]/.test(inputField.value)) {
-    inputField.value = inputField.value.replace(/[^a-zA-Z\s]/g, "");
-    return;
-  }
-  check();
-});
-
 function setCharOfset() {
   allChar.forEach((char) => {
     char.style.transform = `translateX(-${totalScrollWidth}px)`;
@@ -266,25 +299,6 @@ function scrollToCurrentChar(type) {
     setCharOfset();
   }
 }
-
-inputField.addEventListener("blur", enforceFocus);
-if (!finished) {
-  enforceFocus();
-}
-
-window.addEventListener("focus", () => {
-  inputField.focus();
-  unfocusedCover.style.opacity = "0";
-  setTimeout(() => {
-    unfocusedCover.style.zIndex = "-5";
-  }, 200);
-});
-
-window.addEventListener("blur", () => {
-  unfocusedCover.style.zIndex = "5";
-  inputField.blur();
-  unfocusedCover.style.opacity = "1";
-});
 
 function start() {
   console.log("Start");
@@ -442,55 +456,112 @@ function toggleHud() {
   }
 }
 
-document
-  .getElementById("inputField")
-  .addEventListener("keyup", function (keyboardEvent) {
-    const capsLockOn = keyboardEvent.getModifierState("CapsLock");
-    if (capsLockOn) {
-      capsLockWarning.style.opacity = "1";
-    } else if (capsLockWarning.style.opacity === "1") {
-      capsLockWarning.style.opacity = "0";
-    }
-  });
-
 function enforceFocus() {
   inputField.focus();
 }
 
-window.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") {
-    cheat();
+function initAudioCache() {
+  allowkeys.forEach((key) => {
+    const audio = new Audio(`keyboardSounds/${key}.wav`);
+    audio.load(); // 預加載
+    audioCache[key] = audio;
+  });
+
+  console.log("Audio cache initialized");
+}
+
+function initEventListeners() {
+  document.addEventListener("keydown", (e) => {
+    let keyName = e.key;
+    if (e.key === " ") {
+      keyName = "space";
+    } else {
+      keyName = keyName.toLowerCase();
+    }
+    if (allowkeys.includes(keyName) && volumnStat) {
+      audioCache[keyName].cloneNode().play();
+    }
+  });
+
+  inputField.addEventListener("input", () => {
+    if (/[^a-zA-Z\s,\.]/.test(inputField.value)) {
+      inputField.value = inputField.value.replace(/[^a-zA-Z\s,\.]/g, "");
+      return;
+    }
+    check();
+  });
+
+  inputField.addEventListener("blur", enforceFocus);
+  if (!finished) {
+    enforceFocus();
   }
-  if (e.key === "Tab") {
-    e.preventDefault();
-    next();
+
+  window.addEventListener("focus", () => {
+    inputField.focus();
+    unfocusedCover.style.opacity = "0";
     setTimeout(() => {
-      nextBut.classList.remove("active");
-    }, 300);
-    nextBut.classList.add("active");
-  }
-  if (e.altKey && e.key === "r") {
-    replay();
-    setTimeout(() => {
-      replayBut.classList.remove("active");
-    }, 300);
-    replayBut.classList.add("active");
-    e.preventDefault();
-  }
-  if (e.altKey && e.key === "m") {
-    changeMode();
-    setTimeout(() => {
-      modeBut.classList.remove("active");
-    }, 300);
-    modeBut.classList.add("active");
-    e.preventDefault();
-  }
-  if (
-    e.key === "arrowup " ||
-    e.key === "ArrowDown" ||
-    e.key === "ArrowLeft" ||
-    e.key === "ArrowRight"
-  ) {
-    e.preventDefault();
-  }
-});
+      unfocusedCover.style.zIndex = "-5";
+    }, 200);
+  });
+
+  window.addEventListener("blur", () => {
+    unfocusedCover.style.zIndex = "5";
+    inputField.blur();
+    unfocusedCover.style.opacity = "1";
+  });
+
+  document
+    .getElementById("inputField")
+    .addEventListener("keyup", function (keyboardEvent) {
+      const capsLockOn = keyboardEvent.getModifierState("CapsLock");
+      if (capsLockOn) {
+        capsLockWarning.style.opacity = "1";
+      } else if (capsLockWarning.style.opacity === "1") {
+        capsLockWarning.style.opacity = "0";
+      }
+    });
+
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      cheat();
+    }
+    if (e.key === "Tab") {
+      e.preventDefault();
+      next();
+      setTimeout(() => {
+        nextBut.classList.remove("active");
+      }, 300);
+      nextBut.classList.add("active");
+    }
+    if (e.altKey && e.key === "r") {
+      replay();
+      setTimeout(() => {
+        replayBut.classList.remove("active");
+      }, 300);
+      replayBut.classList.add("active");
+      e.preventDefault();
+    }
+    if (e.altKey && e.key === "m") {
+      changeMode();
+      setTimeout(() => {
+        modeBut.classList.remove("active");
+      }, 300);
+      modeBut.classList.add("active");
+      e.preventDefault();
+    }
+    if (
+      e.key === "arrowup " ||
+      e.key === "ArrowDown" ||
+      e.key === "ArrowLeft" ||
+      e.key === "ArrowRight"
+    ) {
+      e.preventDefault();
+    }
+
+    if (e.ctrlKey) {
+      e.preventDefault();
+    }
+  });
+
+  console.log("Event listeners initialized");
+}

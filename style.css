@@ -412,6 +412,7 @@ button::after {
   bottom: 30px;
   right: 30px;
   flex-direction: row;
+  justify-content: end;
   gap: 20px;
   width: 130px;
   height: 55px;
@@ -494,3 +495,4 @@ button::after {
   font-weight: 500;
   line-height: normal;
 }
+
