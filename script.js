@@ -410,12 +410,12 @@ function toggleVolumn() {
   if (volumnStat) {
     volumnStat = false;
     const volumnIcon = document.getElementById("volumnIcon");
-    volumnIcon.src = "./volumnOff.svg";
+    volumnIcon.src = "icons/volumnOff.svg";
     volumnBut.classList.add("pressed");
   } else {
     volumnStat = true;
     const volumnIcon = document.getElementById("volumnIcon");
-    volumnIcon.src = "./volumnOn.svg";
+    volumnIcon.src = "icons/volumnOn.svg";
     volumnBut.classList.remove("pressed");
   }
 }
@@ -427,7 +427,7 @@ function toggleHud() {
     });
     hudStat = false;
     const hudIcon = document.getElementById("hudIcon");
-    hudIcon.src = "./hudOff.svg";
+    hudIcon.src = "icons/hudOff.svg";
     hudBut.classList.add("pressed");
   } else {
     hudStat = true;
@@ -437,7 +437,7 @@ function toggleHud() {
       });
     }
     const hudIcon = document.getElementById("hudIcon");
-    hudIcon.src = "./hud.svg";
+    hudIcon.src = "icons/hud.svg";
     hudBut.classList.remove("pressed");
   }
 }
