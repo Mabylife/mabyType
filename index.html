@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Maby Typing</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="wordmark">mabytype.surge.sh</h1>
+      <div class="mainTextCon" id="mainText"></div>
+      <div class="butCon">
+        <button class="modeBut fake3d" id="modeBut" onclick="changeMode()">
+          10 Words
+        </button>
+        <button class="replayBut fake3d" id="replayBut" onclick="replay()">
+          <img id="replayLogo" src="repeat.svg" alt="replay" />
+        </button>
+        <button class="nextBut fake3d" id="nextBut" onclick="next()">
+          <img id="nextLogo" src="next.svg" alt="next" />
+        </button>
+      </div>
+    </div>
+
+    <div class="line"></div>
+    <input type="text" id="inputField" class="opacityNone" autocomplete="off" />
+
+    <div class="unfocused" id="unfocused">
+      <div class="unfocusedCon">
+        <img src="cursor.png" alt="cursor" />
+        <p>Click here to focus</p>
+      </div>
+    </div>
+
+    <div class="resultCon" id="resultCon">
+      <div class="resultConLeft">
+        <p class="wpmText" id="wpmText">WPM</p>
+        <p class="wpmValue" id="wpmValue">48/60</p>
+        <p class="grossText" id="grossText">Net / Gross</p>
+      </div>
+      <div class="resultConRight">
+        <div class="cpmCon">
+          <p class="cpmText" id="cpmText">CPM</p>
+          <p class="cpmValue" id="cpmValue">315 / 400</p>
+        </div>
+        <div class="accCon">
+          <p class="accText" id="accText">ACC</p>
+          <p class="accValue" id="accValue">71.6 %</p>
+        </div>
+        <div class="timeCon">
+          <p class="timeText" id="timeText">TIME</p>
+          <p class="timeValue" id="timeValue">24.44 s</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="hudTimer hud" id="hudTimer">0s</p>
+    <p class="hudCounter hud" id="hudCounter">0</p>
+
+    <div class="altButCon" id="altButCon">
+      <button class="volumnBut" id="volumnBut" onclick="toggleVolumn()">
+        <img id="volumnIcon" src="volumnOn.svg">
+      </button>
+      <button class="hudBut" id="hudBut" onclick="toggleHud()">
+        <img id="hudIcon" src="hud.svg"/>
+    </div>
+    <div class="capsLockWanring" id="capsLockWarning">
+      <img src="lock.svg" />
+      <p>Caps Lock</p>
+    </div>
+    <script type="module" src="script.js"></script>
+  </body>
+</html>

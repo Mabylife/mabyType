@@ -1,0 +1,475 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #353535;
+  overflow: hidden;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  gap: 150px;
+  overflow: hidden;
+}
+
+.opacityNone {
+  position: absolute;
+  top: 0;
+  left: 0;
+  filter: alpha(opacity=0);
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+}
+
+.wordmark {
+  color: #f4f3f1;
+  font-family: "Bebas Neue";
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 12px;
+  cursor: default;
+}
+
+.mainTextCon {
+  align-self: self-start;
+  position: absolute;
+  left: 50%;
+  display: flex;
+  height: max-content;
+  color: #777;
+  font-family: Khand;
+  font-size: 60px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  letter-spacing: 5px;
+  text-wrap: nowrap;
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  cursor: default;
+}
+
+.mainTextSpace {
+  width: 20px;
+  height: 100%;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.incorrect {
+  color: #ec9495;
+}
+
+.correct {
+  color: #f4f3f1;
+}
+
+.butCon {
+  display: flex;
+  gap: 36px;
+  flex-shrink: 0;
+}
+
+button {
+  width: 176px;
+  height: 55px;
+  flex-shrink: 0;
+  background-color: #777;
+  color: #f4f3f1;
+  text-align: center;
+  font-family: "Bebas Neue";
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 2.4px;
+  border-radius: 15px;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 3;
+  cursor: pointer;
+}
+
+.replayBut svg {
+  width: 24px;
+  height: 24px;
+}
+
+.nextBut svg {
+  width: 40px;
+  height: 40px;
+}
+
+button.fake3d {
+  box-shadow: 0px 10px #494949;
+}
+
+button.fake3d.active {
+  animation: fake3dPress 0.3s forwards;
+}
+
+@keyframes fake3dPress {
+  0% {
+    box-shadow: 0px 10px #494949;
+    transform: translateY(0);
+  }
+  50% {
+    box-shadow: 0px 5px #494949;
+    transform: translateY(5px);
+  }
+  100% {
+    box-shadow: 0px 10px #494949;
+    transform: translateY(0);
+  }
+}
+
+button::after {
+  position: absolute;
+  color: #777;
+  font-family: "Bebas Neue";
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  top: 75px;
+}
+
+.replayBut::after {
+  content: "alt+r";
+}
+
+.nextBut::after {
+  content: "tab";
+}
+
+.modeBut::after {
+  content: "alt+m";
+}
+
+.wordmark,
+.butCon {
+  transition: all 0.2s ease-in;
+}
+
+.line {
+  height: 230px;
+  width: 1px;
+  background-color: white;
+  z-index: 2;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+}
+
+.mainTextChar {
+  margin: 0;
+  padding: 0;
+  flex-shrink: 0;
+  transition: all 0.1s ease-in-out;
+}
+
+.wrongSpace::after {
+  color: #ec9495;
+  font-family: Khand;
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  text-wrap: nowrap;
+  flex-shrink: 0;
+  content: "_";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.unfocused {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -5;
+  display: flex;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  width: 100vw;
+  height: 100vh;
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: all 0.2s ease-in;
+}
+
+.unfocusedCon {
+  width: max-content;
+  height: 40px;
+  flex-shrink: 0;
+  color: #f4f3f1;
+  font-family: "Bebas Neue";
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 4px;
+  display: flex;
+  gap: 20px;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.unfocusedCon img {
+  width: 32px;
+  height: 32px;
+}
+
+.resultCon {
+  cursor: default;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(0%, -50%);
+  height: max-content;
+  width: max-content;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 50px;
+  margin-left: 61px;
+  transition: all 0.2s ease-in;
+}
+
+.resultConLeft {
+  width: max-content;
+  height: 180px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0;
+}
+
+.wpmText {
+  color: #777;
+  font-family: "Bebas Neue";
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 2px;
+}
+
+.wpmValue {
+  color: #f4f3f1;
+  font-family: "Bebas Neue";
+  font-size: 64px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 3.2px;
+}
+
+.grossText {
+  color: #777;
+  font-family: Khand;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 48px;
+  letter-spacing: 1.2px;
+}
+
+.resultConRight {
+  width: max-content;
+  height: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: start;
+}
+
+.cpmCon,
+.accCon,
+.timeCon {
+  width: max-content;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 12px;
+  font-family: "Bebas Neue";
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 2px;
+}
+
+.cpmText,
+.accText,
+.timeText {
+  color: #777;
+  width: 79px;
+}
+
+.cpmValue,
+.accValue,
+.timeValue {
+  color: #f4f3f1;
+}
+
+.cpmText:hover::before,
+.accText:hover::before,
+.timeText:hover::before,
+.wpmText:hover::before {
+  color: #777;
+  position: absolute;
+  bottom: 45px;
+  left: 0;
+  font-family: Khand;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: 1.2px;
+  text-wrap: nowrap;
+}
+
+.cpmText,
+.accText,
+.timeText,
+.wpmText {
+  position: relative;
+}
+
+.wpmText:hover::before {
+  content: "Words Per Minute";
+}
+
+.accText:hover::before {
+  content: "Accuracy";
+}
+
+.timeText:hover::before {
+  content: "Total typing time";
+}
+
+.cpmText:hover::before {
+  content: "Characters Per Minute";
+}
+
+.hud {
+  position: absolute;
+  transition: all 0.2s ease-in;
+  color: #f4f3f1;
+  font-family: Khand;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  letter-spacing: 3.2px;
+  opacity: 0;
+}
+
+.hudTimer {
+  bottom: calc(50% + 77px);
+  right: calc(50% + 20px);
+}
+
+.hudCounter {
+  bottom: calc(50% + 77px);
+  left: calc(50% + 20px);
+}
+
+.altButCon {
+  display: flex;
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  flex-direction: row;
+  gap: 20px;
+  width: 130px;
+  height: 55px;
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+
+#volumnBut,
+#hudBut {
+  flex-grow: 0;
+  background-color: #777;
+  border: none;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  box-shadow: 0px 10px #494949;
+  transition: all 0.2s ease-in;
+}
+
+.altButCon button img {
+  width: 24px;
+  height: 24px;
+}
+
+.pressed {
+  transform: translateY(5px) !important;
+  background-color: #494949 !important;
+  box-shadow: 0px 5px #3e3e3e !important;
+}
+
+.capsLockWanring {
+  width: 176px;
+  height: 55px;
+  flex-shrink: 0;
+  border: #ec9495 3px solid;
+  position: absolute;
+  border-radius: 15px;
+  top: calc(50% + 60px);
+  right: 50%;
+  transform: translate(50%, 0%);
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  color: #ec9495;
+  font-family: "Bebas Neue";
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 1.2px;
+  gap: 10px;
+  transition: all 0.2s ease-in;
+  z-index: 2;
+  backdrop-filter: blur(4px);
+  opacity: 0;
+}
+
+.capsLockWanring img {
+  width: 24px;
+  height: 24px;
+  vertical-align: middle;
+}
