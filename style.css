@@ -218,6 +218,7 @@ button::after {
   align-items: center;
   opacity: 0;
   transition: all 0.2s ease-in;
+  cursor: pointer;
 }
 
 .unfocusedCon {

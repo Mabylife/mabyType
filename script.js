@@ -200,9 +200,7 @@ function replay() {
   let tmpAnsArray = [...ansArray];
   startNewReset();
   ansArray = tmpAnsArray;
-  setTimeout(() => {
     showText(ansArray.length);
-  }, 0);
 }
 
 function startNewReset() {
