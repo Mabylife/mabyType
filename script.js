@@ -27,9 +27,9 @@ const allowkeys = [
   "x",
   "y",
   "z",
-  ",",
-  ".",
-  "capslock",
+  "dot",
+  "comma",
+  "CapsLock",
   "backspace",
   "enter",
   "shift",
@@ -179,6 +179,7 @@ function showText(times) {
 function next() {
   if (volumnStat) {
     audioCache["shift"].cloneNode().play();
+    console.log("play shift audio");
   }
   finish();
   allChar.forEach((char) => {
@@ -196,6 +197,7 @@ function next() {
 function replay() {
   if (volumnStat) {
     audioCache["shift"].cloneNode().play();
+    console.log("play shift audio");
   }
   setTimeout(() => {
     replayBut.classList.remove("active");
@@ -246,7 +248,7 @@ function finish() {
 }
 
 function randomInt(min, max) {
-  return Math.floor(Math.random() * (max - min)) + min;
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 function changeMode() {
@@ -337,7 +339,7 @@ function makeResult() {
   wpm = cpm / 5;
   rcpm = ((correct + incorrect) / seconds) * 60;
   rwpm = rcpm / 5;
-  tmpacc = (correct / (correct + incorrect)).toFixed(3) * 100;
+  tmpacc = (correct / (correct + incorrect)) * 100;
   acc = tmpacc.toFixed(1);
 
   if (!isWordsMode) {
@@ -471,8 +473,18 @@ function initAudioCache() {
 function initEventListeners() {
   document.addEventListener("keydown", (e) => {
     let keyName = e.key;
+    console.log(keyName);
     if (e.key === " ") {
       keyName = "space";
+    }
+    if (e.key === "CapsLock") {
+      keyName = "CapsLock";
+    }
+    if (e.key === ".") {
+      keyName = "dot";
+    }
+    if (e.key === ",") {
+      keyName = "comma";
     } else {
       keyName = keyName.toLowerCase();
     }
@@ -484,13 +496,14 @@ function initEventListeners() {
       return;
     } else if (allowkeys.includes(keyName) && volumnStat) {
       audioCache[keyName].cloneNode().play();
+      console.log(`play ${keyName} audio`);
     }
   });
 
   inputField.addEventListener("input", () => {
-    if (/[^a-zA-Z\s,\.]/.test(inputField.value)) {
-      inputField.value = inputField.value.replace(/[^a-zA-Z\s,\.]/g, "");
-      return;
+    const validInput = inputField.value.replace(/[^a-zA-Z\s,\.]/g, "");
+    if (inputField.value !== validInput) {
+      inputField.value = validInput;
     }
     check();
   });
