@@ -179,7 +179,6 @@ function showText(times) {
 function next() {
   if (volumnStat) {
     audioCache["shift"].cloneNode().play();
-    console.log("play shift audio");
   }
   finish();
   allChar.forEach((char) => {
@@ -197,7 +196,6 @@ function next() {
 function replay() {
   if (volumnStat) {
     audioCache["shift"].cloneNode().play();
-    console.log("play shift audio");
   }
   setTimeout(() => {
     replayBut.classList.remove("active");
@@ -343,7 +341,6 @@ function makeResult() {
   acc = tmpacc.toFixed(1);
 
   if (!isWordsMode) {
-    console.log("realTime" + Number(seconds.toFixed(2)) + " s");
     seconds = totalCD;
   }
 
@@ -473,7 +470,6 @@ function initAudioCache() {
 function initEventListeners() {
   document.addEventListener("keydown", (e) => {
     let keyName = e.key;
-    console.log(keyName);
     if (e.key === " ") {
       keyName = "space";
     }
@@ -496,16 +492,16 @@ function initEventListeners() {
       return;
     } else if (allowkeys.includes(keyName) && volumnStat) {
       audioCache[keyName].cloneNode().play();
-      console.log(`play ${keyName} audio`);
     }
   });
 
   inputField.addEventListener("input", () => {
-    const validInput = inputField.value.replace(/[^a-zA-Z\s,\.]/g, "");
+    const validInput = inputField.value.replace(/[^a-zA-Z ,\.]/g, "");
     if (inputField.value !== validInput) {
       inputField.value = validInput;
+    } else {
+      check();
     }
-    check();
   });
 
   inputField.addEventListener("blur", enforceFocus);
