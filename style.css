@@ -1,6 +1,7 @@
 @import "./animation.css";
 @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Khand:wght@300;400;500;600;700&display=swap");
 
+
 * {
   margin: 0;
   padding: 0;
@@ -172,13 +173,13 @@ button::after {
 }
 
 .line {
-  height: 230px;
-  width: 1px;
+  height: 80px;
+  width: 3px;
   background-color: white;
   z-index: 2;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) translateY(-5.5px);
   position: absolute;
 }
 
@@ -186,7 +187,7 @@ button::after {
   margin: 0;
   padding: 0;
   flex-shrink: 0;
-  transition: all 0.1s ease-in-out;
+  transition: all 0.15s ease-in-out;
 }
 
 .wrongSpace::after {
