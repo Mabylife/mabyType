@@ -105,6 +105,9 @@ function init() {
 
 function hideLoadingScreen() {
   loadingScreen.style.animation = "fadeOut 1s forwards";
+  setTimeout(() => {
+    loadingScreen.style.zIndex = "-10";
+  }, 1000);
 }
 
 function initComplete() {
