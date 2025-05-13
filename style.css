@@ -1,3 +1,4 @@
+@import "./animation.css";
 @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Khand:wght@300;400;500;600;700&display=swap");
 
 * {
@@ -495,5 +496,25 @@ button::after {
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+}
+
+.loadingScreen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  justify-content: center;
+  align-items: center;
+  background-color: #000000;
+  z-index: 10;
+  opacity: 1;
+}
+
+.spinner {
+  animation: spin 1s ease-in-out infinite;
 }
 

@@ -50,6 +50,7 @@ const showArea = document.getElementById("mainText");
 const unfocusedCover = document.getElementById("unfocused");
 const resultCon = document.getElementById("resultCon");
 const audioCache = {};
+const loadingScreen = document.querySelector(".loadingScreen");
 let inputCount;
 let ansArray = [];
 let isWordsMode = true;
@@ -68,18 +69,52 @@ let hudStat = true;
 let totalCD;
 let addedCharLength = 0;
 let beforeAnsArrayLength;
+let initCount = 0;
+let isInitComplete = false;
 window.changeMode = changeMode;
 window.replay = replay;
 window.next = next;
 window.toggleVolumn = toggleVolumn;
 window.toggleHud = toggleHud;
 
-initAudioCache();
-initEventListeners();
+init();
 
-startNewReset();
-takeAns(times);
-showText(ansArray.length);
+function init() {
+  initAudioCache();
+  initEventListeners();
+  startNewReset();
+  takeAns(times);
+  showText(ansArray.length);
+  if (document.fonts.status === "loaded") {
+    initCount++;
+    console.log("Font already loaded");
+  } else {
+    document.fonts.onloadingdone = function () {
+      initCount++;
+      console.log("Font loaded");
+    };
+  }
+
+  let initCheckInterval = setInterval(() => {
+    if (initCount === 6) {
+      initComplete();
+      clearInterval(initCheckInterval);
+    }
+  }, 500);
+}
+
+function hideLoadingScreen() {
+  loadingScreen.style.animation = "fadeOut 1s forwards";
+}
+
+function initComplete() {
+  console.log("Init Complete");
+  hideLoadingScreen();
+  setTimeout(() => {
+    isInitComplete = true;
+    console.log("isInitComplete: true");
+  }, 500);
+}
 
 function check() {
   countChar();
@@ -149,6 +184,9 @@ function takeAns(times) {
     ansArray.pop();
     addedCharLength--;
   }
+
+  console.log("takeAns complete");
+  initCount++;
 }
 
 function logArray(array) {
@@ -174,6 +212,9 @@ function showText(times) {
   }
 
   allChar = document.querySelectorAll(".mainTextChar");
+
+  console.log("showText complete");
+  initCount++;
 }
 
 function next() {
@@ -223,6 +264,8 @@ function startNewReset() {
   showArea.innerHTML = "";
   totaltime = 0;
   resultCon.style.opacity = "0";
+  console.log("startNewReset Complete");
+  initCount++;
 }
 function finish() {
   console.log("Finish");
@@ -465,6 +508,7 @@ function initAudioCache() {
   });
 
   console.log("Audio cache initialized");
+  initCount++;
 }
 
 function initEventListeners() {
@@ -496,6 +540,11 @@ function initEventListeners() {
   });
 
   inputField.addEventListener("input", () => {
+    if (!isInitComplete) {
+      inputField.value = "";
+      return;
+    }
+
     const validInput = inputField.value.replace(/[^a-zA-Z ,\.]/g, "");
     if (inputField.value !== validInput) {
       inputField.value = validInput;
@@ -568,10 +617,11 @@ function initEventListeners() {
       e.preventDefault();
     }
 
-    if (e.ctrlKey) {
+    if (e.ctrlKey && e.key === "a") {
       e.preventDefault();
     }
   });
 
   console.log("Event listeners initialized");
+  initCount++;
 }
