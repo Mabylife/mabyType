@@ -258,6 +258,7 @@ function startNewReset() {
   allChar.forEach((char) => {
     char.remove();
   });
+  showArea.style.transform = "none";
   inputCount = 0;
   ansArray.length = 0;
   finished = false;
@@ -327,9 +328,7 @@ function changeMode() {
 }
 
 function setCharOfset() {
-  allChar.forEach((char) => {
-    char.style.transform = `translateX(-${totalScrollWidth}px)`;
-  });
+  showArea.style.transform = `translateX(-${totalScrollWidth}px)`;
 }
 
 function scrollToCurrentChar(type) {

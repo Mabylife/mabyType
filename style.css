@@ -1,7 +1,6 @@
 @import "./animation.css";
 @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Khand:wght@300;400;500;600;700&display=swap");
 
-
 * {
   margin: 0;
   padding: 0;
@@ -65,6 +64,7 @@ body {
   text-align: center;
   position: relative;
   cursor: default;
+  transition: all 0.15s ease-in-out;
 }
 
 .mainTextSpace {
@@ -187,7 +187,6 @@ button::after {
   margin: 0;
   padding: 0;
   flex-shrink: 0;
-  transition: all 0.15s ease-in-out;
 }
 
 .wrongSpace::after {
@@ -518,4 +517,3 @@ button::after {
 .spinner {
   animation: spin 1s ease-in-out infinite;
 }
-
