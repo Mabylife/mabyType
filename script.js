@@ -175,7 +175,7 @@ function takeAns(times) {
   beforeAnsArrayLength = ansArray.length;
   addedCharLength = 0;
   for (let i = 0; i < times; i++) {
-    let word = wordsData[randomInt(0, wordsData.length)];
+    let word = wordsData[randomInt(0, wordsData.length - 1)];
     for (let char of word) {
       ansArray.push(char);
       addedCharLength++;
