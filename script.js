@@ -87,11 +87,9 @@ function init() {
   showText(ansArray.length);
   if (document.fonts.status === "loaded") {
     initCount++;
-    console.log("Font already loaded");
   } else {
     document.fonts.onloadingdone = function () {
       initCount++;
-      console.log("Font loaded");
     };
   }
 
@@ -115,7 +113,6 @@ function initComplete() {
   hideLoadingScreen();
   setTimeout(() => {
     isInitComplete = true;
-    console.log("isInitComplete: true");
   }, 500);
 }
 
@@ -188,7 +185,6 @@ function takeAns(times) {
     addedCharLength--;
   }
 
-  console.log("takeAns complete");
   initCount++;
 }
 
@@ -216,7 +212,6 @@ function showText(times) {
 
   allChar = document.querySelectorAll(".mainTextChar");
 
-  console.log("showText complete");
   initCount++;
 }
 
@@ -268,11 +263,9 @@ function startNewReset() {
   showArea.innerHTML = "";
   totaltime = 0;
   resultCon.style.opacity = "0";
-  console.log("startNewReset Complete");
   initCount++;
 }
 function finish() {
-  console.log("Finish");
   timerStop = performance.now();
   wordmark.style.opacity = "1";
   butCon.style.opacity = "1";
@@ -350,7 +343,6 @@ function scrollToCurrentChar(type) {
 }
 
 function start() {
-  console.log("Start");
   wordmark.style.opacity = "0.5";
   butCon.style.opacity = "0.5";
   started = true;
@@ -509,7 +501,6 @@ function initAudioCache() {
     audioCache[key] = audio;
   });
 
-  console.log("Audio cache initialized");
   initCount++;
 }
 
@@ -555,10 +546,11 @@ function initEventListeners() {
     }
   });
 
-  inputField.addEventListener("blur", enforceFocus);
-  if (!finished) {
-    enforceFocus();
-  }
+  inputField.addEventListener("blur", () => {
+    setTimeout(() => {
+      enforceFocus();
+    }, 0);
+  });
 
   window.addEventListener("focus", () => {
     inputField.focus();
@@ -624,6 +616,5 @@ function initEventListeners() {
     }
   });
 
-  console.log("Event listeners initialized");
   initCount++;
 }
