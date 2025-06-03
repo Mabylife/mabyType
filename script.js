@@ -40,7 +40,6 @@ const volumnBut = document.getElementById("volumnBut");
 const hudBut = document.getElementById("hudBut");
 const huds = document.querySelectorAll(".hud");
 const capsLockWarning = document.getElementById("capsLockWarning");
-const inputField = document.getElementById("inputField");
 const replayBut = document.getElementById("replayBut");
 const nextBut = document.getElementById("nextBut");
 const modeBut = document.getElementById("modeBut");
@@ -76,6 +75,7 @@ window.replay = replay;
 window.next = next;
 window.toggleVolumn = toggleVolumn;
 window.toggleHud = toggleHud;
+let typedArray = [];
 
 init();
 
@@ -117,11 +117,10 @@ function initComplete() {
 }
 
 function check() {
-  countChar();
   if (finished) {
     return;
   }
-  let tpinputCount = inputField.value.length - 1;
+  let tpinputCount = typedArray.length - 1;
 
   if (started === false && tpinputCount === 0) {
     start();
@@ -139,7 +138,7 @@ function check() {
     scrollToCurrentChar("forward");
   }
 
-  let inputCurrent = inputField.value.charAt(inputCount);
+  let inputCurrent = typedArray[inputCount];
   let indexChar = document.getElementById(`char${inputCount}`);
   if (indexChar) {
     if (inputCurrent === ansArray[inputCount]) {
@@ -166,6 +165,7 @@ function check() {
     showText(30);
     return;
   }
+  countChar();
 }
 
 function takeAns(times) {
@@ -249,7 +249,7 @@ function replay() {
 }
 
 function startNewReset() {
-  inputField.value = "";
+  typedArray = [];
   allChar.forEach((char) => {
     char.remove();
   });
@@ -422,27 +422,32 @@ function hudDisplay(status) {
     });
   }
 
-  setTimeout(() => {
-    clearInterval(timerInterVal);
-    const timer = document.getElementById("hudTimer");
-    totaltime = 0;
+  clearInterval(timerInterVal);
+  const timer = document.getElementById("hudTimer");
+  totaltime = 0;
+  hudChar = 0;
+  const counter = document.getElementById("hudCounter");
+  if (!status) {
+    setTimeout(() => {
+      timer.innerText = totaltime + "s";
+      counter.innerText = hudChar;
+    }, 200);
+  } else {
     timer.innerText = totaltime + "s";
-    hudChar = 0;
-    const counter = document.getElementById("hudCounter");
     counter.innerText = hudChar;
+  }
 
-    if (status) {
-      clearInterval(timerInterVal);
-      timerInterVal = setInterval(() => {
-        totaltime += 1;
-        timer.innerText = totaltime + "s";
-      }, 1000);
-    }
-  }, 200);
+  if (status) {
+    clearInterval(timerInterVal);
+    timerInterVal = setInterval(() => {
+      totaltime += 1;
+      timer.innerText = totaltime + "s";
+    }, 1000);
+  }
 }
 
 function countChar() {
-  hudChar = inputField.value.length;
+  hudChar = typedArray.length;
   const counter = document.getElementById("hudCounter");
   counter.innerText = hudChar;
 }
@@ -490,10 +495,6 @@ function toggleHud() {
   }
 }
 
-function enforceFocus() {
-  inputField.focus();
-}
-
 function initAudioCache() {
   allowkeys.forEach((key) => {
     const audio = new Audio(`keyboardSounds/${key}.wav`);
@@ -505,55 +506,35 @@ function initAudioCache() {
 }
 
 function initEventListeners() {
+  // This part is for input
   document.addEventListener("keydown", (e) => {
-    let keyName = e.key;
-    if (e.key === " ") {
-      keyName = "space";
-    }
-    if (e.key === "CapsLock") {
-      keyName = "CapsLock";
-    }
-    if (e.key === ".") {
-      keyName = "dot";
-    }
-    if (e.key === ",") {
-      keyName = "comma";
-    } else {
-      keyName = keyName.toLowerCase();
-    }
-    if (
-      (e.altKey && keyName === "r") ||
-      (e.altKey && keyName === "m") ||
-      keyName === "tab"
-    ) {
-      return;
-    } else if (allowkeys.includes(keyName) && volumnStat) {
-      audioCache[keyName].cloneNode().play();
-    }
-  });
-
-  inputField.addEventListener("input", () => {
     if (!isInitComplete) {
-      inputField.value = "";
+      console.log("Waiting for init to complete...");
+      typedArray = [];
       return;
     }
-
-    const validInput = inputField.value.replace(/[^a-zA-Z ,\.]/g, "");
-    if (inputField.value !== validInput) {
-      inputField.value = validInput;
-    } else {
+    let key = e.key;
+    if (e.key === "Backspace") {
+      typedArray.pop();
+      check();
+    } else if (/^[a-zA-Z ,\.]$/.test(key)) {
+      typedArray.push(key);
       check();
     }
-  });
+    if (volumnStat) {
+      let keyName = key;
+      if (key === " ") keyName = "space";
+      if (key === ".") keyName = "dot";
+      if (key === ",") keyName = "comma";
 
-  inputField.addEventListener("blur", () => {
-    setTimeout(() => {
-      enforceFocus();
-    }, 0);
+      if (audioCache[keyName.toLowerCase()]) {
+        audioCache[keyName.toLowerCase()].cloneNode().play();
+      }
+    }
   });
+  ////////////////////////////////////////////////////////////
 
   window.addEventListener("focus", () => {
-    inputField.focus();
     unfocusedCover.style.opacity = "0";
     setTimeout(() => {
       unfocusedCover.style.zIndex = "-5";
@@ -562,20 +543,17 @@ function initEventListeners() {
 
   window.addEventListener("blur", () => {
     unfocusedCover.style.zIndex = "5";
-    inputField.blur();
     unfocusedCover.style.opacity = "1";
   });
 
-  document
-    .getElementById("inputField")
-    .addEventListener("keyup", function (keyboardEvent) {
-      const capsLockOn = keyboardEvent.getModifierState("CapsLock");
-      if (capsLockOn) {
-        capsLockWarning.style.opacity = "1";
-      } else if (capsLockWarning.style.opacity === "1") {
-        capsLockWarning.style.opacity = "0";
-      }
-    });
+  document.addEventListener("keyup", function (keyboardEvent) {
+    const capsLockOn = keyboardEvent.getModifierState("CapsLock");
+    if (capsLockOn) {
+      capsLockWarning.style.opacity = "1";
+    } else if (capsLockWarning.style.opacity === "1") {
+      capsLockWarning.style.opacity = "0";
+    }
+  });
 
   window.addEventListener("keydown", (e) => {
     if (e.key === "Tab") {
@@ -603,6 +581,7 @@ function initEventListeners() {
       e.preventDefault();
     }
     if (
+      e.key === " " ||
       e.key === "arrowup " ||
       e.key === "ArrowDown" ||
       e.key === "ArrowLeft" ||
