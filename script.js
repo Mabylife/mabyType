@@ -249,6 +249,16 @@ function replay() {
 }
 
 function startNewReset() {
+  const wpmValue = document.getElementById("wpmValue");
+  const cpmValue = document.getElementById("cpmValue");
+  const accValue = document.getElementById("accValue");
+  const timeValue = document.getElementById("timeValue");
+  const grossText = document.getElementById("grossText");
+  if (wpmValue) wpmValue.innerText = "";
+  if (cpmValue) cpmValue.innerText = "";
+  if (accValue) accValue.innerText = "";
+  if (timeValue) timeValue.innerText = "";
+  if (grossText) grossText.innerText = "";
   typedArray = [];
   allChar.forEach((char) => {
     char.remove();
@@ -379,6 +389,7 @@ function makeResult() {
 
   if (!isWordsMode) {
     seconds = totalCD;
+    ㄍ;
   }
 
   const wpmValue = document.getElementById("wpmValue");
