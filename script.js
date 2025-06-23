@@ -518,6 +518,8 @@ function initAudioCache() {
 
 function initEventListeners() {
   // This part is for input
+  /** 
+  
   document.addEventListener("keydown", (e) => {
     if (!isInitComplete) {
       console.log("Waiting for init to complete...");
@@ -543,7 +545,50 @@ function initEventListeners() {
       }
     }
   });
+
+  **/
   ////////////////////////////////////////////////////////////
+
+const inputField = document.getElementById("mandarinInput");
+let isComposing = false;
+inputField.addEventListener("compositionstart", () => {
+  isComposing = true;
+});
+
+inputField.addEventListener("compositionend", () => {
+  isComposing = false;
+typedArray = inputField.value.split("");
+inputField.value = ""; // Clear the input field after composition
+  check();
+});
+
+setInterval(() => {
+  console.log(inputField.value);
+  console.log(typedArray);
+
+}, 100);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   window.addEventListener("focus", () => {
     unfocusedCover.style.opacity = "0";

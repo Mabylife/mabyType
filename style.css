@@ -517,3 +517,15 @@ button::after {
 .spinner {
   animation: spin 1s ease-in-out infinite;
 }
+
+.mandarinInput {
+  width: 176px;
+  height: 55px;
+  flex-shrink: 0;
+  position: absolute;
+  border-radius: 15px;
+  top: calc(50% + 60px);
+  right: 50%;
+  transform: translate(50%, 0%);
+  z-index: 10;
+}
