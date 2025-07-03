@@ -76,6 +76,7 @@ window.next = next;
 window.toggleVolumn = toggleVolumn;
 window.toggleHud = toggleHud;
 let typedArray = [];
+let timeModeCountDown;
 
 init();
 
@@ -276,7 +277,10 @@ function startNewReset() {
   initCount++;
 }
 function finish() {
+  clearInterval(timeModeCountDown);
+
   timerStop = performance.now();
+  console.log((timerStop - timerStart) / 1000); // seconds
   wordmark.style.opacity = "1";
   butCon.style.opacity = "1";
   finished = true;
@@ -359,9 +363,9 @@ function start() {
   timerStart = performance.now();
   hudDisplay(true);
   if (!isWordsMode) {
-    let altTimer = setInterval(() => {
+    timeModeCountDown = setInterval(() => {
       finish();
-      clearInterval(altTimer);
+      clearInterval(timeModeCountDown);
     }, totalCD * 1000);
   }
 }
