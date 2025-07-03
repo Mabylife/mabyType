@@ -162,7 +162,7 @@ function check() {
 
   if (inputCount === ansArray.length - 30 && started && !isWordsMode) {
     takeAns(30);
-    showText(30);
+    showText();
     return;
   }
   countChar();
@@ -194,7 +194,7 @@ function logArray(array) {
   });
 }
 
-function showText(times) {
+function showText() {
   for (
     let i = beforeAnsArrayLength;
     i < addedCharLength + beforeAnsArrayLength;
@@ -389,7 +389,6 @@ function makeResult() {
 
   if (!isWordsMode) {
     seconds = totalCD;
-    ㄍ;
   }
 
   const wpmValue = document.getElementById("wpmValue");
